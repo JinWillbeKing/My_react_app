@@ -14,7 +14,6 @@ class Login extends Component {
                     <img src={logo} alt="logo"/>
                     <h1>商品管理系统</h1>
                 </div>
-                
                 <div className="content">
                     <h2>用户登录</h2>
 
