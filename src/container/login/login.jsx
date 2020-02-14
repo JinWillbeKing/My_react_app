@@ -1,8 +1,11 @@
 import React, {Component} from 'react'
-import {Form, Icon, Input, Button} from 'antd';
-import axios from 'axios'
+import {Form, Icon, Input, Button, message} from 'antd';
+import {connect} from 'react-redux'
+import {createSaveUserInfoAction} from '../../redux/actions/login'
 import logo from './images/logo.png'
 import './css/login.less'
+import {requestLogin} from '../../api/index'
+import { Redirect } from 'react-router-dom';
 
 class Login extends Component {
 
@@ -22,25 +25,28 @@ class Login extends Component {
     
     handleSubmit = (e) => {
         e.preventDefault()
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields(async(err, values) => {
             if (!err) {
                 const {username,password} = values
-                // console.log('Received values of form: ', values);
-                
-                axios.post('http://localhost:3000/login',`username=${username}&password=${password}`).then(
-                    (response) => {console.log(response.data);},
-                    (error) => {console.log(err);}
-                   
-                )
-                
+                let result = await requestLogin(username,password)
+                const {status,data,msg} = result
+                if (status === 0) {
+                    message.success('欢迎光临红浪漫')
+                    console.log(data)
+                    this.props.saveUser(data)
+                    this.props.history.replace('/admin')
+                }else{
+                    message.error(msg)
+                }
             }
         });
-
     }
     
-
     render() {
-
+        const {isLogin} = this.props.userInfo
+        if (isLogin) {
+            return <Redirect to="/admin"/>
+        }
         const { getFieldDecorator } = this.props.form;
         return (
             <div id="login">
@@ -93,4 +99,8 @@ class Login extends Component {
 }
 
 
-export default Form.create()(Login);
+export default connect(
+    (state) => ({userInfo:state.userInfo}),
+    {saveUser:createSaveUserInfoAction}
+    
+)(Form.create()(Login))
