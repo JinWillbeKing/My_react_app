@@ -5,8 +5,15 @@ import {createSaveUserInfoAction} from '../../redux/actions/login'
 import logo from './images/logo.png'
 import './css/login.less'
 import {requestLogin} from '../../api/index'
-import { Redirect } from 'react-router-dom';
+import check from '../check/check'
 
+
+@connect(
+    (state) => ({userInfo:state.userInfo}),
+    {saveUser:createSaveUserInfoAction}
+)
+@Form.create()
+@check
 class Login extends Component {
 
     validatorPassword = (rule, value, callback) => {
@@ -43,10 +50,10 @@ class Login extends Component {
     }
     
     render() {
-        const {isLogin} = this.props.userInfo
-        if (isLogin) {
-            return <Redirect to="/admin"/>
-        }
+        // const {isLogin} = this.props.userInfo
+        // if (isLogin) {
+        //     return <Redirect to="/admin"/>
+        // }
         const { getFieldDecorator } = this.props.form;
         return (
             <div id="login">
@@ -98,9 +105,10 @@ class Login extends Component {
     }
 }
 
+export default Login
 
-export default connect(
-    (state) => ({userInfo:state.userInfo}),
-    {saveUser:createSaveUserInfoAction}
+// export default connect(
+//     (state) => ({userInfo:state.userInfo}),
+//     {saveUser:createSaveUserInfoAction}
     
-)(Form.create()(Login))
+// )(Form.create()(Login))
