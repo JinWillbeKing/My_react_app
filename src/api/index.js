@@ -24,4 +24,5 @@ export const requestWeather = ()=> {
     })
 }
 
-
+//分类列表
+export const requestCategory = ()=> myAxios.get('/manage/category/list')

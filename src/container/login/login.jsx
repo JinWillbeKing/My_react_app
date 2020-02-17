@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Form, Icon, Input, Button, message} from 'antd';
 import {connect} from 'react-redux'
 import {createSaveUserInfoAction} from '../../redux/actions/login'
-import logo from './images/logo.png'
+import logo from '../../static/imgs/logo.png'
 import './css/login.less'
 import {requestLogin} from '../../api/index'
 import check from '../check/check'
@@ -39,7 +39,6 @@ class Login extends Component {
                 const {status,data,msg} = result
                 if (status === 0) {
                     message.success('欢迎光临红浪漫')
-                    console.log(data)
                     this.props.saveUser(data)
                     this.props.history.replace('/admin')
                 }else{

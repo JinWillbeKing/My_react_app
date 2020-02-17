@@ -6,6 +6,7 @@ import screenfull from 'screenfull'
 import './css/header.less'
 import dayjs from 'dayjs'
 import {requestWeather} from '../../api/index'
+import {createDeleteTitleAction} from '../../redux/actions/header'
 
 
 
@@ -14,8 +15,11 @@ const { confirm } = Modal;
 
 
 @connect(
-    (state) => ({userInfo:state.userInfo}),
-    {deleateUserInfo:createDeleteUserInfoAction}
+    (state) => ({userInfo:state.userInfo,title:state.headerTitle}),
+    {
+        deleateUserInfo:createDeleteUserInfoAction,
+        deleteTitle:createDeleteTitleAction
+    }
 )
 class Header extends Component {
     state = {
@@ -62,6 +66,7 @@ class Header extends Component {
             cancelText:'我要留下',
             onOk:()=> {
                 this.props.deleateUserInfo()
+                this.props.deleteTitle()
             },
         });
 
@@ -80,7 +85,7 @@ class Header extends Component {
                 </div>
                 <div className="headerBottom">
                     <div className="bottomLeft">
-                        <span>首页</span>
+                        <span>{this.props.title}</span>
                     </div>
                     <div className="bottomRight">
                         <span>{this.state.date}</span>
